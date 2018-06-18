@@ -7,8 +7,10 @@ class Map(models.Model):
     path = models.CharField(max_length=300)
     created_date = models.DateTimeField(default=timezone.now)
 
-    #def uploadMap(self):
-        #TODO implement this method
+    #TODO implement openMap
+    #TODO implement saveMap
+    #TODO implement Djistra
+    #TODO implement uploadMap
 
     def __str__(self):
         return self.name
@@ -21,8 +23,8 @@ class Route(models.Model):
     distance = models.FloatField()
     created_date = models.DateTimeField(default=timezone.now)
 
-    #def getRoute(self):
-        #TODO implement this method
+
+    #TODO implement getRoute
 
     def __str__(self):
         return [self.origin, self.destiny, self.distance]
