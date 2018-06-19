@@ -22,5 +22,6 @@ urlpatterns = [
   url(r'^admin/', admin.site.urls),
   url(r'^api/', include('shortest_route_app.urls')),
 ]
+
 if settings.DEBUG:
   urlpatterns += static(settings.MAP_URL, document_root=settings.MAP_ROOT)

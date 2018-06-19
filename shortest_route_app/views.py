@@ -5,6 +5,7 @@ from rest_framework import status
 from .serializers import FileMapSerializer
 from .models import FileMap
 
+#This class contain API handlers to manipulate the file map with methods GET, POST and DELETE
 class FileMapView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = FileMapSerializer
@@ -12,7 +13,11 @@ class FileMapView(APIView):
 
     def get(self, request, format=None):
         mapsList = FileMap.objects.all()
-        return Response({'maps':mapsList})
+        result = []
+        for map in mapsList:
+            result.append(map.name)
+
+        return Response({'maps':result})
 
     def post(self, request, *args, **kwargs):
         file_serializer = FileMapSerializer(data=request.data)
