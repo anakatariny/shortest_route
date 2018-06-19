@@ -3,8 +3,8 @@ from django.utils import timezone
 
 #this class take care of the file information and validates the format
 class FileMap(models.Model):
-    name = models.CharField(max_length=300, unique=True)
-    file = models.FileField()
+    name = models.CharField(max_length=300, unique=True, blank=False)
+    file = models.FileField(blank=False, null=False)
     created_date = models.DateTimeField(default=timezone.now)
 
     #TODO implement openFile
@@ -17,9 +17,9 @@ class FileMap(models.Model):
 #this class take care of the map information inside the file
 class Map(models.Model):
     file_id = models.ForeignKey('shortest_route_app.FileMap', on_delete=models.CASCADE)
-    first_edge = models.CharField(max_length=200)
-    second_edge = models.CharField(max_length=200)
-    value = models.FloatField()
+    first_edge = models.CharField(max_length=200, blank=False)
+    second_edge = models.CharField(max_length=200, blank=False)
+    value = models.FloatField(blank=False, null=False)
     created_date = models.DateTimeField(default=timezone.now)
 
     #TODO implement saveMap
@@ -31,9 +31,9 @@ class Map(models.Model):
 #this class have all the calculated routes
 class Route(models.Model):
     file_id = models.ForeignKey('shortest_route_app.FileMap', on_delete=models.CASCADE)
-    origin = models.CharField(max_length=200)
-    destiny = models.CharField(max_length=200)
-    distance = models.FloatField()
+    origin = models.CharField(max_length=200, blank=False)
+    destiny = models.CharField(max_length=200, blank=False)
+    distance = models.FloatField(blank=False, null=False)
     created_date = models.DateTimeField(default=timezone.now)
 
 
