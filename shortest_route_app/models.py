@@ -1,21 +1,68 @@
 from django.db import models
 from django.utils import timezone
+from rest_framework.exceptions import ValidationError
 
-#this class take care of the file information and validates the format
+
+def is_number(possible_value):
+    """
+    this functions checks if the possible value is a number or can be converted in one
+    """
+    try:
+        float(possible_value)
+        return True
+    except ValueError:
+        pass
+
+    try:
+        import unicodedata
+        unicodedata.numeric(possible_value)
+        return True
+    except (TypeError, ValueError):
+        pass
+    return False
+
+
+def validate_file(self):
+    """
+    this functions checks if the file uploaded is in the expected format
+    """
+    try:
+        fileMap = self.readlines()
+    except:
+        raise ValidationError(
+            "Invalid File. Can't open file.")
+    line_number = 1
+    for line in fileMap:
+        # Separate content by space, dividing each line into 3 columns to evaluate the contents of the file
+        strLine = line.decode("utf-8")
+        splited_line = strLine.split(" ")
+        # if the file don't have 3 columns each line, or the third value is not a number throw the error
+        if (len(splited_line) != 3):
+            raise ValidationError(
+                "Invalid File. Error in line " + str(line_number) + ". Format invalid.")
+        if not is_number(splited_line[2]):
+            raise ValidationError("Invalid File. Error in line " + str(line_number) + ". Invalid value.")
+        line_number += 1
+
+    return self
+
+
 class FileMap(models.Model):
+    """
+    this class take care of the file information
+    """
     name = models.CharField(max_length=300, unique=True, blank=False)
-    file = models.FileField(blank=False, null=False)
+    file = models.FileField(blank=False, null=False, upload_to='maps/', validators=[validate_file])
     created_date = models.DateTimeField(default=timezone.now)
-
-    #TODO implement openFile
-    #TODO validate file
-    #TODO save file
 
     def __str__(self):
         return self.name
 
-#this class take care of the map information inside the file
+
 class Map(models.Model):
+    """
+    this class take care of the map information inside the file
+    """
     file_id = models.ForeignKey('shortest_route_app.FileMap', on_delete=models.CASCADE)
     first_edge = models.CharField(max_length=200, blank=False)
     second_edge = models.CharField(max_length=200, blank=False)
@@ -28,8 +75,11 @@ class Map(models.Model):
     def __str__(self):
         return [self.first_edge, self.second_edge, self.value]
 
-#this class have all the calculated routes
+
 class Route(models.Model):
+    """
+    this class have all the calculated routes
+    """
     file_id = models.ForeignKey('shortest_route_app.FileMap', on_delete=models.CASCADE)
     origin = models.CharField(max_length=200, blank=False)
     destiny = models.CharField(max_length=200, blank=False)
