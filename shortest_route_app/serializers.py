@@ -6,8 +6,9 @@ class FileMapSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FileMap
-        fields = ('id','name', 'file')
-        read_only = ('id','name', 'file', 'created_date')
+        fields = ('id', 'name', 'file')
+        read_only = ('id', 'name', 'created_date')
+        extra_kwargs = {'file': {'write_only': True}}
 
 
 class MapSerializer(serializers.ModelSerializer):

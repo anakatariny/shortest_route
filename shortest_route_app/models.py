@@ -1,9 +1,12 @@
+import hashlib
+import hmac
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
-
+from shortest_route.settings import SECRET_KEY
 
 def is_number(possible_value):
     """
@@ -33,22 +36,25 @@ def validate_file(self):
     :return: fileMap
     """
     try:
-        fileMap = self.readlines()
-    except:
+        file_map = self.readlines()
+    except (TypeError, ValueError):
         raise ValidationError(
             "Invalid File. Can't open file.")
     line_number = 1
-    for line in fileMap:
+    for line in file_map:
         # Separate content by space, dividing each line into 3 columns to evaluate the contents of the file
-        strLine = line.decode("utf-8")
-        splited_line = strLine.split(" ")
+        str_line = line.decode("utf-8")
+        splited_line = str_line.split(" ")
         # if the file don't have 3 columns each line, or the third value is not a number throw the error
-        if (len(splited_line) != 3):
+        if len(splited_line) != 3:
             raise ValidationError(
                 "Invalid File. Error in line " + str(line_number) + ". Format invalid.")
         if not is_number(splited_line[2]):
             raise ValidationError("Invalid File. Error in line " + str(line_number) + ". Invalid value.")
         line_number += 1
+    key = bytes(SECRET_KEY, 'UTF-8')
+    new_file_name = hmac.new(key, self.name.encode('utf-8'), hashlib.sha256).hexdigest()
+    self.name = new_file_name+".txt"
 
     return self
 

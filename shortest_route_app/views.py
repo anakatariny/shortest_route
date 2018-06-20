@@ -32,9 +32,6 @@ class FileMapView(APIView):
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def perform_create(self, serializer):
-        serializer.ValidationError("Can't open file.")
-
 
 class FileMapDetail(APIView):
     """
@@ -82,4 +79,3 @@ class MapView(APIView):
 
         return Response({'maps': result})
 
-        return Response({'points': 'test'})

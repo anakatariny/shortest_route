@@ -128,6 +128,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+SECRET_KEY = "Matheus e crocs eu tô chegando. Stored ai vou eu!"
+
 # Defines the file's storage path
 MAP_URL = '/map/'
 MAP_ROOT = os.path.join(BASE_DIR, "map")
