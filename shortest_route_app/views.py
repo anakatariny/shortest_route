@@ -3,8 +3,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status, serializers
 from django.http import Http404
-from .serializers import FileMapSerializer
-from .models import FileMap
+from .serializers import FileMapSerializer, MapSerializer
+from .models import FileMap, Map
 
 
 class FileMapView(APIView):
@@ -64,3 +64,22 @@ class FileMapDetail(APIView):
         fileMap = self.get_object(pk)
         fileMap.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class MapView(APIView):
+    """
+    This class contain API handlers to manipulate the class map in database with methods GET, POST and DELETE
+    """
+    serializer_class = MapSerializer
+    queryset = Map.objects.all()
+
+    def get(self, request, format=None):
+        points_list = Map.objects.all()
+        # get all the map fields
+        result = []
+        for point in points_list:
+            result.append("map_id:"+point.file_id.name+"; first_edge:"+point.first_edge+"; second_edge:"+point.second_edge+"; value:"+str(point.value))
+
+        return Response({'maps': result})
+
+        return Response({'points': 'test'})
