@@ -2,6 +2,7 @@
 
 from django.db import migrations, models
 import shortest_route_app.models
+from shortest_route_app.models.FileMap import validate_file
 
 
 class Migration(migrations.Migration):
@@ -20,6 +21,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='filemap',
             name='file',
-            field=models.FileField(upload_to='maps/', validators=[shortest_route_app.models.validate_file]),
+            field=models.FileField(upload_to='maps/', validators=[validate_file]),
         ),
     ]

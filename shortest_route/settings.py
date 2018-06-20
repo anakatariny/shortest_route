@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '9&ty7c5@(g^&el%plt9i=u6hx%iuep37id_j40q-oq@+-@0xtd'
+SECRET_KEY = "Matheus e crocs eu tô chegando. Stored ai vou eu!"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -127,8 +127,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-SECRET_KEY = "Matheus e crocs eu tô chegando. Stored ai vou eu!"
 
 # Defines the file's storage path
 MAP_URL = '/map/'
