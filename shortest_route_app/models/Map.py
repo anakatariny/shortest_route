@@ -12,8 +12,11 @@ class Map(models.Model):
     value = models.FloatField(blank=False, null=False)
     created_date = models.DateTimeField(default=timezone.now)
 
-    #TODO implement saveMap
-    #TODO implement calculate route
+    def get_edge(self):
+        """
+        :return: returns the information in a vector so the graph can use it
+        """
+        return (self.first_edge, self.second_edge, self.value)
 
     def __str__(self):
         return "first_edge:" + self.first_edge + "; second_edge:" + self.second_edge + "; value:" + str(self.value)

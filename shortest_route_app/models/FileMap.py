@@ -1,32 +1,11 @@
 import hashlib
 import hmac
-from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.db import models, transaction
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 from shortest_route.settings import SECRET_KEY
 from shortest_route_app.models import Map
-
-
-def is_number(possible_value):
-    """
-    this functions checks if the third value from a row is a number or can be converted in one
-    :param possible_value: the value that will be tested, the validation is correct if the value is a float
-    :return: boolean
-    """
-    try:
-        float(possible_value)
-        return True
-    except ValueError:
-        pass
-    try:
-        import unicodedata
-        unicodedata.numeric(possible_value)
-        return True
-    except (TypeError, ValueError):
-        pass
-    return False
+from shortest_route_app.utils.Utils import is_number
 
 
 def validate_file(self):
@@ -58,26 +37,13 @@ def validate_file(self):
 
     return self
 
-class FileMap(models.Model):
+def save_points_from_file(instance):
     """
-    this class take care of the file information
-    """
-    name = models.CharField(max_length=300, unique=True, blank=False)
-    file = models.FileField(blank=False, null=False, upload_to='maps/', validators=[validate_file])
-    created_date = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return self.name
-
-@receiver(post_save, sender=FileMap)
-def save_points(sender, instance, **kwargs):
-    """
-    :param sender:
+    this function gets all the data in the MapFile, that way is possible to save each point and their value to the database
     :param instance: File with the map
     :param kwargs:
     :return: points saved
     """
-    print('post save callback' + str(instance.id))
     try:
         file_map = instance.file.readlines()
     except (TypeError, ValueError):
@@ -88,16 +54,41 @@ def save_points(sender, instance, **kwargs):
         # Separate content by space, dividing each line into 3 columns to evaluate the contents of the file
         str_line = line.decode("utf-8")
         splited_line = str_line.split(" ")
-        point = Map(file_id=instance,
-                    first_edge=splited_line[0],
-                    second_edge=splited_line[1],
-                    value=float(splited_line[2]))
+        point = Map.objects.filter(file_id=instance, first_edge=splited_line[0], second_edge=splited_line[1]).first()
+        # if i have the data save already i just put the last value in their place, else i put all the new information there
+        if point is not None:
+            point.value = float(splited_line[2])
+        else:
+            point = Map(file_id=instance,
+                        first_edge=splited_line[0],
+                        second_edge=splited_line[1],
+                        value=float(splited_line[2]))
         try:
             point.save()
         except (TypeError, ValueError):
-            instance.delete()
             raise ValidationError(
                 "Invalid File. Can't save the map.")
         line_number += 1
+
+
+class FileMap(models.Model):
+    """
+    this class take care of the file information
+    """
+    name = models.CharField(max_length=300, unique=True, blank=False)
+    file = models.FileField(blank=False, null=False, upload_to='maps/', validators=[validate_file])
+    created_date = models.DateTimeField(default=timezone.now)
+
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+        """
+        this function call the personalized function that will save all data in the database
+        if the map or the data can't me saved atomic ensures the rollback
+        """
+        super(FileMap, self).save(*args, **kwargs)
+        save_points_from_file(self)
+
+    def __str__(self):
+        return self.name
 
 

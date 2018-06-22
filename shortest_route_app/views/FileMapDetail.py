@@ -9,6 +9,7 @@ from shortest_route_app.models import FileMap
 class FileMapDetail(APIView):
     """
     Retrieve, update or delete a fileMap instance.
+    all the function inside this class have a primary key that make a reference to a specific FileMap
     """
 
     def get_object(self, pk):

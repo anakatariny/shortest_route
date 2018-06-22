@@ -6,7 +6,7 @@ from shortest_route_app.models import Map
 
 class MapView(APIView):
     """
-    This class contain API handlers to manipulate the class map in database with methods GET, POST and DELETE
+    get each row in the database
     """
     serializer_class = MapSerializer
     queryset = Map.objects.all()
