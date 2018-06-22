@@ -243,10 +243,15 @@ class TestShortestRoute(unittest.TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_shortest_route_very_long_map(self):
-        url = 'shortest_route/teste11/A/D/10/2/'
+        self.client.post(self.end_point + "map/", self.json_map_large, format='json')
+        url = 'shortest_route/map_large/A/L/10/2.5/'
+        correct = "best_route:['A', 'U', 'T', 'L']; cost:247.0;"
+        response = self.client.get(self.end_point + url)
+        self.assertEqual(response.data, correct)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_shortest_route_space_name_map(self):
-        save = self.client.post(self.end_point + "map/", self.json_space, format='json')
+        self.client.post(self.end_point + "map/", self.json_space, format='json')
         url = 'shortest_route/space json/A/D/10/2.5/'
         correct = "best_route:['A', 'B', 'D']; cost:6.25;"
         response = self.client.get(self.end_point + url)
@@ -254,9 +259,1015 @@ class TestShortestRoute(unittest.TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_shortest_route_repeat_points(self):
-        save = self.client.post(self.end_point + "map/", self.json_repeat, format='json')
+        self.client.post(self.end_point + "map/", self.json_repeat, format='json')
         url = 'shortest_route/repeat_json/A/D/10/2.5/'
         correct = "best_route:['A', 'B', 'D']; cost:5.0;"
         response = self.client.get(self.end_point + url)
         self.assertEqual(response.data, correct)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    json_map_large = {
+        "name": "map_large",
+        "map": [
+            {
+                "first_edge": "G",
+                "second_edge": "C",
+                "value": 785
+            },
+            {
+                "first_edge": "M",
+                "second_edge": "H",
+                "value": 924
+            },
+            {
+                "first_edge": "L",
+                "second_edge": "E",
+                "value": 363
+            },
+            {
+                "first_edge": "T",
+                "second_edge": "Q",
+                "value": 877
+            },
+            {
+                "first_edge": "Z",
+                "second_edge": "Z",
+                "value": 618
+            },
+            {
+                "first_edge": "K",
+                "second_edge": "O",
+                "value": 520
+            },
+            {
+                "first_edge": "D",
+                "second_edge": "H",
+                "value": 234
+            },
+            {
+                "first_edge": "H",
+                "second_edge": "G",
+                "value": 442
+            },
+            {
+                "first_edge": "L",
+                "second_edge": "F",
+                "value": 825
+            },
+            {
+                "first_edge": "K",
+                "second_edge": "R",
+                "value": 693
+            },
+            {
+                "first_edge": "V",
+                "second_edge": "K",
+                "value": 102
+            },
+            {
+                "first_edge": "V",
+                "second_edge": "R",
+                "value": 720
+            },
+            {
+                "first_edge": "O",
+                "second_edge": "C",
+                "value": 430
+            },
+            {
+                "first_edge": "A",
+                "second_edge": "F",
+                "value": 376
+            },
+            {
+                "first_edge": "F",
+                "second_edge": "W",
+                "value": 597
+            },
+            {
+                "first_edge": "Q",
+                "second_edge": "N",
+                "value": 705
+            },
+            {
+                "first_edge": "D",
+                "second_edge": "N",
+                "value": 636
+            },
+            {
+                "first_edge": "T",
+                "second_edge": "Q",
+                "value": 745
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "A",
+                "value": 555
+            },
+            {
+                "first_edge": "Z",
+                "second_edge": "V",
+                "value": 892
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "A",
+                "value": 871
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "E",
+                "value": 304
+            },
+            {
+                "first_edge": "M",
+                "second_edge": "G",
+                "value": 954
+            },
+            {
+                "first_edge": "N",
+                "second_edge": "B",
+                "value": 103
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "S",
+                "value": 663
+            },
+            {
+                "first_edge": "R",
+                "second_edge": "M",
+                "value": 597
+            },
+            {
+                "first_edge": "X",
+                "second_edge": "Z",
+                "value": 672
+            },
+            {
+                "first_edge": "H",
+                "second_edge": "B",
+                "value": 486
+            },
+            {
+                "first_edge": "E",
+                "second_edge": "A",
+                "value": 872
+            },
+            {
+                "first_edge": "Z",
+                "second_edge": "H",
+                "value": 227
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "T",
+                "value": 392
+            },
+            {
+                "first_edge": "M",
+                "second_edge": "A",
+                "value": 391
+            },
+            {
+                "first_edge": "T",
+                "second_edge": "J",
+                "value": 240
+            },
+            {
+                "first_edge": "D",
+                "second_edge": "J",
+                "value": 396
+            },
+            {
+                "first_edge": "X",
+                "second_edge": "K",
+                "value": 311
+            },
+            {
+                "first_edge": "Q",
+                "second_edge": "Q",
+                "value": 450
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "T",
+                "value": 188
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "Z",
+                "value": 116
+            },
+            {
+                "first_edge": "D",
+                "second_edge": "J",
+                "value": 534
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "K",
+                "value": 258
+            },
+            {
+                "first_edge": "G",
+                "second_edge": "F",
+                "value": 615
+            },
+            {
+                "first_edge": "A",
+                "second_edge": "C",
+                "value": 889
+            },
+            {
+                "first_edge": "W",
+                "second_edge": "U",
+                "value": 944
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "Q",
+                "value": 733
+            },
+            {
+                "first_edge": "A",
+                "second_edge": "Y",
+                "value": 567
+            },
+            {
+                "first_edge": "M",
+                "second_edge": "W",
+                "value": 530
+            },
+            {
+                "first_edge": "Y",
+                "second_edge": "U",
+                "value": 876
+            },
+            {
+                "first_edge": "Y",
+                "second_edge": "G",
+                "value": 565
+            },
+            {
+                "first_edge": "M",
+                "second_edge": "V",
+                "value": 710
+            },
+            {
+                "first_edge": "V",
+                "second_edge": "E",
+                "value": 284
+            },
+            {
+                "first_edge": "B",
+                "second_edge": "E",
+                "value": 206
+            },
+            {
+                "first_edge": "S",
+                "second_edge": "M",
+                "value": 514
+            },
+            {
+                "first_edge": "H",
+                "second_edge": "G",
+                "value": 769
+            },
+            {
+                "first_edge": "A",
+                "second_edge": "Z",
+                "value": 830
+            },
+            {
+                "first_edge": "B",
+                "second_edge": "Q",
+                "value": 521
+            },
+            {
+                "first_edge": "B",
+                "second_edge": "I",
+                "value": 832
+            },
+            {
+                "first_edge": "J",
+                "second_edge": "A",
+                "value": 773
+            },
+            {
+                "first_edge": "M",
+                "second_edge": "T",
+                "value": 470
+            },
+            {
+                "first_edge": "A",
+                "second_edge": "P",
+                "value": 547
+            },
+            {
+                "first_edge": "O",
+                "second_edge": "Q",
+                "value": 665
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "I",
+                "value": 686
+            },
+            {
+                "first_edge": "J",
+                "second_edge": "L",
+                "value": 585
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "C",
+                "value": 753
+            },
+            {
+                "first_edge": "W",
+                "second_edge": "V",
+                "value": 129
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "C",
+                "value": 755
+            },
+            {
+                "first_edge": "N",
+                "second_edge": "Z",
+                "value": 325
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "O",
+                "value": 358
+            },
+            {
+                "first_edge": "G",
+                "second_edge": "U",
+                "value": 554
+            },
+            {
+                "first_edge": "N",
+                "second_edge": "Y",
+                "value": 296
+            },
+            {
+                "first_edge": "T",
+                "second_edge": "B",
+                "value": 984
+            },
+            {
+                "first_edge": "V",
+                "second_edge": "X",
+                "value": 850
+            },
+            {
+                "first_edge": "J",
+                "second_edge": "I",
+                "value": 461
+            },
+            {
+                "first_edge": "B",
+                "second_edge": "Y",
+                "value": 720
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "Q",
+                "value": 218
+            },
+            {
+                "first_edge": "Y",
+                "second_edge": "Y",
+                "value": 700
+            },
+            {
+                "first_edge": "W",
+                "second_edge": "Q",
+                "value": 298
+            },
+            {
+                "first_edge": "W",
+                "second_edge": "W",
+                "value": 581
+            },
+            {
+                "first_edge": "H",
+                "second_edge": "Z",
+                "value": 847
+            },
+            {
+                "first_edge": "L",
+                "second_edge": "L",
+                "value": 872
+            },
+            {
+                "first_edge": "O",
+                "second_edge": "Q",
+                "value": 999
+            },
+            {
+                "first_edge": "P",
+                "second_edge": "H",
+                "value": 397
+            },
+            {
+                "first_edge": "V",
+                "second_edge": "H",
+                "value": 352
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "J",
+                "value": 892
+            },
+            {
+                "first_edge": "I",
+                "second_edge": "M",
+                "value": 711
+            },
+            {
+                "first_edge": "K",
+                "second_edge": "S",
+                "value": 643
+            },
+            {
+                "first_edge": "I",
+                "second_edge": "K",
+                "value": 886
+            },
+            {
+                "first_edge": "R",
+                "second_edge": "O",
+                "value": 975
+            },
+            {
+                "first_edge": "F",
+                "second_edge": "K",
+                "value": 978
+            },
+            {
+                "first_edge": "E",
+                "second_edge": "N",
+                "value": 391
+            },
+            {
+                "first_edge": "B",
+                "second_edge": "K",
+                "value": 875
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "X",
+                "value": 549
+            },
+            {
+                "first_edge": "M",
+                "second_edge": "G",
+                "value": 487
+            },
+            {
+                "first_edge": "E",
+                "second_edge": "A",
+                "value": 884
+            },
+            {
+                "first_edge": "T",
+                "second_edge": "I",
+                "value": 108
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "P",
+                "value": 596
+            },
+            {
+                "first_edge": "Z",
+                "second_edge": "F",
+                "value": 309
+            },
+            {
+                "first_edge": "E",
+                "second_edge": "A",
+                "value": 451
+            },
+            {
+                "first_edge": "J",
+                "second_edge": "D",
+                "value": 111
+            },
+            {
+                "first_edge": "V",
+                "second_edge": "N",
+                "value": 838
+            },
+            {
+                "first_edge": "O",
+                "second_edge": "D",
+                "value": 763
+            },
+            {
+                "first_edge": "J",
+                "second_edge": "J",
+                "value": 715
+            },
+            {
+                "first_edge": "Q",
+                "second_edge": "C",
+                "value": 535
+            },
+            {
+                "first_edge": "P",
+                "second_edge": "I",
+                "value": 297
+            },
+            {
+                "first_edge": "W",
+                "second_edge": "V",
+                "value": 891
+            },
+            {
+                "first_edge": "D",
+                "second_edge": "B",
+                "value": 719
+            },
+            {
+                "first_edge": "N",
+                "second_edge": "B",
+                "value": 731
+            },
+            {
+                "first_edge": "Q",
+                "second_edge": "A",
+                "value": 523
+            },
+            {
+                "first_edge": "X",
+                "second_edge": "X",
+                "value": 494
+            },
+            {
+                "first_edge": "A",
+                "second_edge": "A",
+                "value": 581
+            },
+            {
+                "first_edge": "G",
+                "second_edge": "N",
+                "value": 238
+            },
+            {
+                "first_edge": "S",
+                "second_edge": "S",
+                "value": 174
+            },
+            {
+                "first_edge": "Y",
+                "second_edge": "Y",
+                "value": 521
+            },
+            {
+                "first_edge": "V",
+                "second_edge": "X",
+                "value": 332
+            },
+            {
+                "first_edge": "T",
+                "second_edge": "S",
+                "value": 596
+            },
+            {
+                "first_edge": "G",
+                "second_edge": "O",
+                "value": 693
+            },
+            {
+                "first_edge": "R",
+                "second_edge": "O",
+                "value": 876
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "N",
+                "value": 978
+            },
+            {
+                "first_edge": "W",
+                "second_edge": "P",
+                "value": 535
+            },
+            {
+                "first_edge": "N",
+                "second_edge": "J",
+                "value": 868
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "K",
+                "value": 829
+            },
+            {
+                "first_edge": "P",
+                "second_edge": "E",
+                "value": 341
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "W",
+                "value": 903
+            },
+            {
+                "first_edge": "L",
+                "second_edge": "D",
+                "value": 638
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "W",
+                "value": 291
+            },
+            {
+                "first_edge": "X",
+                "second_edge": "R",
+                "value": 499
+            },
+            {
+                "first_edge": "B",
+                "second_edge": "Z",
+                "value": 667
+            },
+            {
+                "first_edge": "L",
+                "second_edge": "T",
+                "value": 245
+            },
+            {
+                "first_edge": "G",
+                "second_edge": "I",
+                "value": 465
+            },
+            {
+                "first_edge": "A",
+                "second_edge": "A",
+                "value": 271
+            },
+            {
+                "first_edge": "Q",
+                "second_edge": "P",
+                "value": 268
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "Z",
+                "value": 281
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "J",
+                "value": 350
+            },
+            {
+                "first_edge": "Y",
+                "second_edge": "J",
+                "value": 763
+            },
+            {
+                "first_edge": "I",
+                "second_edge": "M",
+                "value": 545
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "R",
+                "value": 684
+            },
+            {
+                "first_edge": "O",
+                "second_edge": "U",
+                "value": 264
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "J",
+                "value": 402
+            },
+            {
+                "first_edge": "M",
+                "second_edge": "K",
+                "value": 641
+            },
+            {
+                "first_edge": "Q",
+                "second_edge": "P",
+                "value": 496
+            },
+            {
+                "first_edge": "V",
+                "second_edge": "O",
+                "value": 646
+            },
+            {
+                "first_edge": "W",
+                "second_edge": "A",
+                "value": 446
+            },
+            {
+                "first_edge": "N",
+                "second_edge": "S",
+                "value": 313
+            },
+            {
+                "first_edge": "H",
+                "second_edge": "Q",
+                "value": 896
+            },
+            {
+                "first_edge": "K",
+                "second_edge": "D",
+                "value": 936
+            },
+            {
+                "first_edge": "E",
+                "second_edge": "K",
+                "value": 422
+            },
+            {
+                "first_edge": "H",
+                "second_edge": "B",
+                "value": 216
+            },
+            {
+                "first_edge": "K",
+                "second_edge": "N",
+                "value": 321
+            },
+            {
+                "first_edge": "I",
+                "second_edge": "U",
+                "value": 579
+            },
+            {
+                "first_edge": "S",
+                "second_edge": "W",
+                "value": 783
+            },
+            {
+                "first_edge": "T",
+                "second_edge": "G",
+                "value": 755
+            },
+            {
+                "first_edge": "S",
+                "second_edge": "W",
+                "value": 384
+            },
+            {
+                "first_edge": "A",
+                "second_edge": "F",
+                "value": 821
+            },
+            {
+                "first_edge": "E",
+                "second_edge": "Y",
+                "value": 696
+            },
+            {
+                "first_edge": "V",
+                "second_edge": "Q",
+                "value": 749
+            },
+            {
+                "first_edge": "N",
+                "second_edge": "V",
+                "value": 637
+            },
+            {
+                "first_edge": "M",
+                "second_edge": "Z",
+                "value": 334
+            },
+            {
+                "first_edge": "S",
+                "second_edge": "H",
+                "value": 293
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "U",
+                "value": 738
+            },
+            {
+                "first_edge": "M",
+                "second_edge": "E",
+                "value": 969
+            },
+            {
+                "first_edge": "V",
+                "second_edge": "C",
+                "value": 976
+            },
+            {
+                "first_edge": "B",
+                "second_edge": "F",
+                "value": 218
+            },
+            {
+                "first_edge": "Z",
+                "second_edge": "Q",
+                "value": 809
+            },
+            {
+                "first_edge": "W",
+                "second_edge": "R",
+                "value": 992
+            },
+            {
+                "first_edge": "T",
+                "second_edge": "Z",
+                "value": 752
+            },
+            {
+                "first_edge": "D",
+                "second_edge": "H",
+                "value": 865
+            },
+            {
+                "first_edge": "R",
+                "second_edge": "N",
+                "value": 303
+            },
+            {
+                "first_edge": "V",
+                "second_edge": "H",
+                "value": 461
+            },
+            {
+                "first_edge": "I",
+                "second_edge": "C",
+                "value": 944
+            },
+            {
+                "first_edge": "K",
+                "second_edge": "E",
+                "value": 592
+            },
+            {
+                "first_edge": "A",
+                "second_edge": "X",
+                "value": 261
+            },
+            {
+                "first_edge": "B",
+                "second_edge": "V",
+                "value": 933
+            },
+            {
+                "first_edge": "O",
+                "second_edge": "G",
+                "value": 406
+            },
+            {
+                "first_edge": "J",
+                "second_edge": "O",
+                "value": 818
+            },
+            {
+                "first_edge": "B",
+                "second_edge": "G",
+                "value": 968
+            },
+            {
+                "first_edge": "I",
+                "second_edge": "R",
+                "value": 942
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "A",
+                "value": 577
+            },
+            {
+                "first_edge": "W",
+                "second_edge": "M",
+                "value": 241
+            },
+            {
+                "first_edge": "M",
+                "second_edge": "Y",
+                "value": 949
+            },
+            {
+                "first_edge": "K",
+                "second_edge": "B",
+                "value": 347
+            },
+            {
+                "first_edge": "F",
+                "second_edge": "K",
+                "value": 123
+            },
+            {
+                "first_edge": "Z",
+                "second_edge": "W",
+                "value": 324
+            },
+            {
+                "first_edge": "Z",
+                "second_edge": "X",
+                "value": 426
+            },
+            {
+                "first_edge": "B",
+                "second_edge": "A",
+                "value": 674
+            },
+            {
+                "first_edge": "Z",
+                "second_edge": "K",
+                "value": 616
+            },
+            {
+                "first_edge": "B",
+                "second_edge": "K",
+                "value": 298
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "Z",
+                "value": 287
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "O",
+                "value": 135
+            },
+            {
+                "first_edge": "G",
+                "second_edge": "J",
+                "value": 621
+            },
+            {
+                "first_edge": "N",
+                "second_edge": "F",
+                "value": 487
+            },
+            {
+                "first_edge": "T",
+                "second_edge": "I",
+                "value": 492
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "P",
+                "value": 824
+            },
+            {
+                "first_edge": "J",
+                "second_edge": "N",
+                "value": 696
+            },
+            {
+                "first_edge": "R",
+                "second_edge": "Z",
+                "value": 399
+            },
+            {
+                "first_edge": "C",
+                "second_edge": "P",
+                "value": 473
+            },
+            {
+                "first_edge": "M",
+                "second_edge": "D",
+                "value": 337
+            },
+            {
+                "first_edge": "Y",
+                "second_edge": "Q",
+                "value": 789
+            },
+            {
+                "first_edge": "O",
+                "second_edge": "O",
+                "value": 152
+            },
+            {
+                "first_edge": "U",
+                "second_edge": "L",
+                "value": 682
+            },
+            {
+                "first_edge": "T",
+                "second_edge": "B",
+                "value": 286
+            },
+            {
+                "first_edge": "O",
+                "second_edge": "H",
+                "value": 643
+            }
+        ]
+    }
