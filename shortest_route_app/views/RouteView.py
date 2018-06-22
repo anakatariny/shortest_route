@@ -12,13 +12,20 @@ from shortest_route_app.utils.Utils import is_number
 
 @api_view(['GET'])
 def get_shortest_route(request, map_name, origin, destination, fuel_autonomy, fuel_cost):
-    """Busca menor rota (distância) e calcula seu custo de combustivel dado a autonomia do veículo"""
+    """
+    Search the best route (distance) and calculates the route cost given the autonomy of the vehicle and fuel cost
+    """
 
     try:
         map = FileMap.objects.get(name=map_name)
     except FileMap.DoesNotExist:
         return Response('No map with this name was found.', status=status.HTTP_400_BAD_REQUEST)
     # note: checking origin and destination as first and second edges because is bidirectional
+    try:
+        origin = origin.upper()
+        destination = destination.upper()
+    except Map.ValueError:
+        return Response('Origin or destination invalid.', status=status.HTTP_400_BAD_REQUEST)
     if not Map.objects.filter(Q(first_edge=origin) | Q(second_edge=origin)).exists():
         return Response('Point of origin not found on the map.', status=status.HTTP_400_BAD_REQUEST)
 
@@ -32,10 +39,10 @@ def get_shortest_route(request, map_name, origin, destination, fuel_autonomy, fu
         return Response('Fuel cost must be a number.', status=status.HTTP_400_BAD_REQUEST)
     # checks if the route is in the cache, if true just return the route, else calculates a shortest route
     cached_route = (Route.objects.filter(file_id=map, origin=origin, destination=destination) | \
-                   Route.objects.filter(file_id=map, origin=destination, destination=origin)).first()
+                    Route.objects.filter(file_id=map, origin=destination, destination=origin)).first()
     if cached_route is not None:
-        cost = (cached_route.distance/float(fuel_autonomy))*float(fuel_cost)
-        return Response('best_route:' + cached_route.minimum_route + '; cost:' + str(cost) + '; Route in Cache!!!!')
+        cost = (cached_route.distance / float(fuel_autonomy)) * float(fuel_cost)
+        return Response('best_route:' + cached_route.minimum_route + '; cost:' + str(cost) + ';', status=status.HTTP_200_OK)
     else:
         paths = Map.objects.filter(file_id__name=map_name)
         graph = Graph()
@@ -49,18 +56,18 @@ def get_shortest_route(request, map_name, origin, destination, fuel_autonomy, fu
         if type(best_route) == list:
             # get the last element in the list because the distance is there
             dist = best_route[-1]
-            cost = (dist/float(fuel_autonomy))*float(fuel_cost)
+            cost = (dist / float(fuel_autonomy)) * float(fuel_cost)
             del best_route[-1]
         # save the result in cache
         cache_result = Route.objects.create(file_id=map, origin=origin, destination=destination,
-                                          minimum_route=str(best_route), distance=dist)
+                                            minimum_route=str(best_route), distance=dist)
         cache_result.save()
-        return Response('best_route:' + str(best_route) + '; cost:' + str(cost) + '; Route from New Route!!!!')
+        return Response('best_route:' + str(best_route) + '; cost:' + str(cost) + ';', status=status.HTTP_200_OK)
 
 
 class RouteView(APIView):
     """
-    This class contain API handlers to manipulate the class map in database with methods GET, POST and DELETE
+    This class contain API handlers to manipulate the class map
     """
     serializer_class = RouteSerializer
     queryset = Route.objects.all()
@@ -73,8 +80,4 @@ class RouteView(APIView):
             result.append("map_id:" + route.file_id.name + "; origin:" + route.origin + "; destination:" +
                           route.destination + "; path:" + route.minimum_route + "; distance:" + str(route.distance))
 
-        return Response({'routes': result})
-
-
-
-
+        return Response({'routes': result}, status=status.HTTP_200_OK)

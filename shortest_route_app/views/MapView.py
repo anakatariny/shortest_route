@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from shortest_route_app.serializers import MapSerializer
@@ -18,5 +19,5 @@ class MapView(APIView):
         for point in points_list:
             result.append("map_id:"+point.file_id.name+"; first_edge:"+point.first_edge+"; second_edge:"+point.second_edge+"; value:"+str(point.value))
 
-        return Response({'maps': result})
+        return Response({'maps': result}, status=status.HTTP_200_OK)
 
