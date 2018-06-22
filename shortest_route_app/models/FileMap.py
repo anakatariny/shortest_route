@@ -55,9 +55,9 @@ def save_points_from_file(instance):
         str_line = line.decode("utf-8")
         splited_line = str_line.split(" ")
         point = Map.objects.filter(file_id=instance, first_edge=splited_line[0], second_edge=splited_line[1]).first()
-        # if i have the data save already i just put the last value in their place, else i put all the new information there
+        # if the data is saved already update the value with the smaller value
         if point is not None:
-            point.value = float(splited_line[2])
+            point.value = min(point.value, float(splited_line[2]))
         else:
             point = Map(file_id=instance,
                         first_edge=splited_line[0],
@@ -83,7 +83,6 @@ class FileMap(models.Model):
     def save(self, *args, **kwargs):
         """
         this function call the personalized function that will save all data in the database
-        if the map or the data can't me saved atomic ensures the rollback
         """
         super(FileMap, self).save(*args, **kwargs)
         save_points_from_file(self)
