@@ -10,7 +10,8 @@ urlpatterns = [
     path('routes/', RouteView.as_view()),
     # this expression redirects to the shortest route function and calculates the best path. The cost is calculated
     # with the extra data passed in this url (car autonomy, origin, fuel cost)
-    re_path(r'shortest_route/(?P<map_name>\w+)/(?P<origin>\w+)/(?P<destination>\w+)/(?P<fuel_autonomy>\d+(\.\d+)?)/'
-            r'(?P<fuel_cost>\d+(\.\d+)?)/',get_shortest_route)
+    re_path(
+        r'shortest_route/(?P<map_name>\w+( +\w+)*)/(?P<origin>\w+( +\w+)*)/(?P<destination>\w+( +\w+)*)/'
+        r'(?P<fuel_autonomy>\d+(\.\d+)?)/(?P<fuel_cost>\d+(\.\d+)?)/', get_shortest_route)
 ]
 
