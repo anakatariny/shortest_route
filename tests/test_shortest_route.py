@@ -243,7 +243,6 @@ class TestShortestRoute(unittest.TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_shortest_route_very_long_map(self):
-        self.client.post(self.end_point + "map/", self.json_map_large, format='json')
         url = 'shortest_route/map_large/A/L/10/2.5/'
         correct = "best_route:['A', 'U', 'T', 'L']; cost:247.0;"
         response = self.client.get(self.end_point + url)
